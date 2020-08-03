@@ -29,7 +29,7 @@ const Service = {
     return param;
   },
   async list() {
-    functions.logger.log("list", "enter to request");
+    functions.logger.log("list enter to request");
     return db
       .collection(collection)
       .get()
@@ -37,6 +37,10 @@ const Service = {
         let docs = [];
         snapshot.forEach((doc) => {
           console.log(doc.id, "=>", doc.data());
+          functions.logger.log("list", {
+            id: doc.id,
+            doc: doc.data(),
+          });
           docs.push({
             id: doc.id,
             doc: doc.data(),

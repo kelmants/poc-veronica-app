@@ -1,13 +1,15 @@
+const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+var serviceAccount = require("./serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://poc-veronica-app.firebaseio.com",
+});
 
 // admin.initializeApp({
 //   credential: admin.credential.applicationDefault(),
-//   databaseURL: "https://poc-veronica-app.firebaseio.com",
 // });
-
-admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
-});
 
 const db = admin.firestore();
 
@@ -27,6 +29,7 @@ const Service = {
     return param;
   },
   async list() {
+    functions.logger.log("list", "enter to request");
     return db
       .collection(collection)
       .get()

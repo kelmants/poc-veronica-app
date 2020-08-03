@@ -3,11 +3,11 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   useParams,
 } from "react-router-dom";
 import logo from "./logo.svg";
 import "./App.css";
+import NoMatch from './NoMatch/NoMatch';
 
 const Screen = () => {
   let { id, hash } = useParams();
@@ -54,6 +54,7 @@ function App() {
         <Route path="/:id/:hash">
           <Screen />
         </Route>
+        <Route component={NoMatch} />
       </Switch>
     </Router>
   );

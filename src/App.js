@@ -1,24 +1,28 @@
+import "bootstrap/dist/css/bootstrap.css";
+import "./assets/css/one-page-wonder.min.css";
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useParams,
-} from "react-router-dom";
-import logo from "./logo.svg";
+import * as firebase from "firebase";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
 import "./App.css";
 import NoMatch from "./NoMatch/NoMatch";
-import { ExampleScreen } from "./components/ExampleScreen";
+import { firebaseConfig } from "./firebaseConfig";
+import { Sofia } from "./templates/Sofia";
+import { DeciderTemplate } from "./DediderTemplate";
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
 
 function App() {
   return (
     <Router>
       <Switch>
         <Route exact path="/">
-          <ExampleScreen title="Initial" />
+          <Sofia />
         </Route>
         <Route path="/:id/:hash">
-          <ExampleScreen title="With param" />
+          <DeciderTemplate />
         </Route>
         <Route component={NoMatch} />
       </Switch>

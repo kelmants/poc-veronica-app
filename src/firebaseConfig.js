@@ -1,4 +1,4 @@
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyAaunczWl2G-weXbM7i3UjuOKa7_3eB3eM",
   authDomain: "poc-veronica-app.firebaseapp.com",
   databaseURL: "https://poc-veronica-app.firebaseio.com",

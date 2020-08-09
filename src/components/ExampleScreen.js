@@ -1,3 +1,7 @@
+import React from "react";
+import { useParams } from "react-router-dom";
+import logo from "../logo.svg";
+
 export const ExampleScreen = ({ title = "Nothing" }) => {
   let { id, hash } = useParams();
   console.log(id, hash);

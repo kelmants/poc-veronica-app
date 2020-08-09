@@ -10,7 +10,7 @@ export function Sofia({ name }) {
   return (
     <main>
       <Nav />
-      <Header />
+      <Header name={name} />
 
       <section>
         <div className="container">

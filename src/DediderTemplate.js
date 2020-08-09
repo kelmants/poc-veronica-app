@@ -8,12 +8,12 @@ import { Aurora } from "./templates/Aurora";
 export function DeciderTemplate() {
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState({});
-  const { id: Template, hash } = useParams();
+  const { hash } = useParams();
 
   const templates = React.useMemo(
     () => ({
       Sofia: <Sofia name={data?.name} />,
-      Aurora: <Aurora />,
+      Aurora: <Aurora name={data?.name} />,
       DefaultTemplate: (
         <div>
           <span>Nothing here</span>
@@ -23,7 +23,7 @@ export function DeciderTemplate() {
     [data]
   );
 
-  const typeTemplate = upperFirst(Template);
+  const typeTemplate = upperFirst(data.template);
   console.log(typeTemplate, hash);
 
   const retrieveData = async () => {
@@ -57,5 +57,7 @@ export function DeciderTemplate() {
         <span>Loadin........</span>
       </div>
     );
+
+  console.log("data", data);
   return templates[typeTemplate] || templates.DefaultTemplate;
 }

@@ -9,6 +9,7 @@ import NoMatch from "./NoMatch/NoMatch";
 import { firebaseConfig } from "./firebaseConfig";
 import { Sofia } from "./templates/Sofia";
 import { DeciderTemplate } from "./DediderTemplate";
+import { LoginPages } from "./pages/login/LoginPages";
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
@@ -18,10 +19,13 @@ function App() {
   return (
     <Router>
       <Switch>
+        <Route exact path="/login">
+          <LoginPages />
+        </Route>
         <Route exact path="/">
           <Sofia />
         </Route>
-        <Route path="/:id/:hash">
+        <Route path="/:hash">
           <DeciderTemplate />
         </Route>
         <Route component={NoMatch} />

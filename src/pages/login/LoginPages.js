@@ -2,7 +2,7 @@ import React from "react";
 import "./styles.css";
 import { useHistory } from "react-router-dom";
 import * as firebase from "firebase";
-import { isEmpty } from "lodash";
+
 export function LoginPages() {
   const history = useHistory();
 
@@ -32,7 +32,6 @@ export function LoginPages() {
     setForm((prev) => ({ ...prev, [target.name]: target.value }));
   };
   const handleLogin = async (event) => {
-    console.log("Quiero cuca con olor a saca punta ");
     event.preventDefault();
 
     const { email, password } = form;

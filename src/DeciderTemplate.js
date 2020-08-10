@@ -26,7 +26,7 @@ export function DeciderTemplate() {
   const typeTemplate = upperFirst(data.template);
   console.log(typeTemplate, hash);
 
-  const retrieveData = async () => {
+  const retrieveData = React.useCallback( async () => {
     try {
       setLoading(true);
       const Document = await firebase
@@ -46,10 +46,11 @@ export function DeciderTemplate() {
     } finally {
       setLoading(false);
     }
-  };
+  },[hash]);
+
   React.useEffect(() => {
     retrieveData();
-  }, []);
+  }, [retrieveData]);
 
   if (loading)
     return (

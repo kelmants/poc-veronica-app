@@ -8,7 +8,7 @@ import "./App.css";
 import NoMatch from "./NoMatch/NoMatch";
 import { firebaseConfig } from "./firebaseConfig";
 import { Sofia } from "./templates/Sofia";
-import { DeciderTemplate } from "./DediderTemplate";
+import { DeciderTemplate } from "./DeciderTemplate";
 import { LoginPages } from "./pages/login/LoginPages";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
 

@@ -80,7 +80,7 @@ export const Dashboard = () => {
   }
 
   useEffect(() => {
-    const suscribe = firebase
+    firebase
       .firestore()
       .collection("clients")
       .onSnapshot(onNext, onError);

@@ -14,8 +14,14 @@ import { Dashboard } from "./pages/Dashboard/Dashboard";
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-// firebase.initializeApp(firebaseConfig);
-// firebase.analytics();
+firebase.analytics();
+
+if (window.location.hostname === "localhost") {
+  firebase.firestore().settings({
+    host: "localhost:8080",
+    ssl: false,
+  });
+}
 
 function App() {
   return (

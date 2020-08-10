@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "./assets/css/one-page-wonder.min.css";
 import React from "react";
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import "./App.css";
@@ -10,10 +10,12 @@ import { firebaseConfig } from "./firebaseConfig";
 import { Sofia } from "./templates/Sofia";
 import { DeciderTemplate } from "./DediderTemplate";
 import { LoginPages } from "./pages/login/LoginPages";
+import { Dashboard } from "./pages/Dashboard/Dashboard";
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+// firebase.initializeApp(firebaseConfig);
+// firebase.analytics();
 
 function App() {
   return (
@@ -21,6 +23,9 @@ function App() {
       <Switch>
         <Route exact path="/login">
           <LoginPages />
+        </Route>
+        <Route exact path="/dashboard">
+          <Dashboard />
         </Route>
         <Route exact path="/">
           <Sofia />

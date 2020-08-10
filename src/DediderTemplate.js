@@ -31,7 +31,7 @@ export function DeciderTemplate() {
       setLoading(true);
       const Document = await firebase
         .firestore()
-        .collection("projects")
+        .collection("clients")
         .doc(hash)
         .get();
       if (Document.exists) {

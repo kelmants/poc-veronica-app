@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 export const Nav = () => {
   return (
     <>
@@ -14,8 +14,7 @@ export const Nav = () => {
             data-target="#navbarResponsive"
             aria-controls="navbarResponsive"
             aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
+            aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarResponsive">

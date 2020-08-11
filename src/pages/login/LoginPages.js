@@ -1,14 +1,14 @@
-import React from "react";
-import "./styles.css";
-import { useHistory } from "react-router-dom";
-import * as firebase from "firebase";
+import React from 'react';
+import './styles.css';
+import { useHistory } from 'react-router-dom';
+import * as firebase from 'firebase';
 
 export function LoginPages() {
   const history = useHistory();
 
   const [loading, setLoading] = React.useState(false);
   const [form, setForm] = React.useState({
-    email: "admin@test.com",
+    email: 'admin@test.com',
     password: 1234567,
   });
 
@@ -16,7 +16,7 @@ export function LoginPages() {
     (user) => {
       console.log(user);
       if (!user) {
-        history.replace("/dashboard");
+        history.replace('/dashboard');
       }
     },
     [history]
@@ -41,7 +41,7 @@ export function LoginPages() {
         .auth()
         .signInWithEmailAndPassword(email, password.toString());
       setForm({});
-      history.replace("/dashboard");
+      history.replace('/dashboard');
     } catch (error) {
       console.log(error);
     } finally {

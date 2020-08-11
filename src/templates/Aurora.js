@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-export function Aurora({ name = "Usuario" }) {
+export function Aurora({ name = 'Usuario' }) {
   return (
     <div className="container">
       <h1>Hola {name}</h1>

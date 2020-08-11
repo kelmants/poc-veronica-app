@@ -1,75 +1,30 @@
-import "primeicons/primeicons.css";
-import "primereact/resources/themes/nova-light/theme.css";
-import "primereact/resources/primereact.css";
-import "primeflex/primeflex.css";
-import "./styles.css";
-
-import React, { useState, useEffect, useRef } from "react";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
-import * as firebase from "firebase";
-import { Dropdown } from "primereact/dropdown";
-import { Calendar } from "primereact/calendar";
-import { MultiSelect } from "primereact/multiselect";
-import { ProgressBar } from "primereact/progressbar";
-import classNames from "classnames";
+import React, { useState, useEffect } from 'react';
+import * as firebase from 'firebase';
+import ModalView from '../../components/Modal';
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { createRowTable } from "../../utils";
 
 const path =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
-    : "https://poc-veronica-app.web.app";
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : 'https://poc-veronica-app.web.app';
 
 export const Dashboard = () => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [globalFilter, setGlobalFilter] = useState(null);
-  const [selectedRepresentatives, setSelectedRepresentatives] = useState(null);
-  const [dateFilter, setDateFilter] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [modalShow, setModalShow] = useState(false);
 
-  let dt = useRef(null);
-
-  const representatives = [
-    { name: "Amy Elsner", image: "amyelsner.png" },
-    { name: "Anna Fali", image: "annafali.png" },
-    { name: "Asiya Javayant", image: "asiyajavayant.png" },
-    { name: "Bernardo Dominic", image: "bernardodominic.png" },
-    { name: "Elwin Sharvill", image: "elwinsharvill.png" },
-    { name: "Ioni Bowcher", image: "ionibowcher.png" },
-    { name: "Ivan Magalhaes", image: "ivanmagalhaes.png" },
-    { name: "Onyama Limba", image: "onyamalimba.png" },
-    { name: "Stephen Shaw", image: "stephenshaw.png" },
-    { name: "XuXue Feng", image: "xuxuefeng.png" },
-  ];
-
-  const statuses = [
-    "unqualified",
-    "qualified",
-    "new",
-    "negotiation",
-    "renewal",
-    "proposal",
-  ];
+  const handleSubmit = (value, callBack) => {
+    firebase.firestore().collection("clients").add(value).then(function () {
+      callBack()
+      setModalShow(false)
+    })
+  }
 
   function onNext(DocumentSnap) {
     const wrapper = [];
     DocumentSnap.forEach((doc) => {
       const data = doc.data();
-      wrapper.push(
-        createRowTable({
-          uuid: doc.id,
-          name: data.name,
-          country: data.country,
-          project: data.project,
-          date: data.date,
-          status: data.accepted,
-          percentaje: data.percentaje,
-        })
-      );
+      wrapper.push({ ...data, id: doc.id });
     });
     setCustomers(wrapper);
     setLoading(false);
@@ -80,10 +35,7 @@ export const Dashboard = () => {
   }
 
   useEffect(() => {
-    firebase
-      .firestore()
-      .collection("clients")
-      .onSnapshot(onNext, onError);
+    firebase.firestore().collection('clients').onSnapshot(onNext, onError);
   }, []);
 
   if (loading) {
@@ -94,304 +46,102 @@ export const Dashboard = () => {
     );
   }
 
-  const renderHeader = () => {
-    return (
-      <div>
-        Client's list
-        <div className="p-datatable-globalfilter-container">
-          <InputText
-            type="search"
-            onInput={(e) => setGlobalFilter(e.target.value)}
-            placeholder="Global Search"
-          />
-        </div>
-      </div>
-    );
-  };
-
-  const activityBodyTemplate = (rowData) => {
-    return <ProgressBar value={rowData.activity} showValue={false} />;
-  };
-
-  const actionBodyTemplate = (item) => {
-    return [
-      <Button
-        type="button"
-        icon="pi pi-user-edit"
-        className="p-button-warning"
-        onClick={() => console.log("click", item)}
-      ></Button>,
-      <Button
-        type="button"
-        icon="pi pi-trash"
-        className="p-button-danger"
-        onClick={() => {
-          console.log("click", item.id);
-        }}
-      ></Button>,
-      <CopyToClipboard
-        text={`${path}/${item.id}`}
-        onCopy={() => console.log("copied")}
-      >
-        <Button
-          type="button"
-          icon="pi pi-trash"
-          className="p-button-secondary"
-        ></Button>
-      </CopyToClipboard>,
-    ];
-  };
-
-  const statusBodyTemplate = (rowData) => {
-    return (
-      <span
-        className={classNames("customer-badge", "status-" + rowData.status)}
-      >
-        {rowData.status}
-      </span>
-    );
-  };
-
-  const countryBodyTemplate = (rowData) => {
-    let { name, code } = rowData.country;
-
-    return (
-      <React.Fragment>
-        <img
-          src="showcase/demo/images/flag_placeholder.png"
-          srcSet="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-          alt={name}
-          className={classNames("flag", "flag-" + code)}
-        />
-        <span style={{ verticalAlign: "middle", marginLeft: ".5em" }}>
-          {name}
-        </span>
-      </React.Fragment>
-    );
-  };
-
-  const representativeBodyTemplate = (rowData) => {
-    const src = "showcase/demo/images/avatar/" + rowData.representative.image;
-
-    return (
-      <React.Fragment>
-        <img
-          alt={rowData.representative.name}
-          srcSet="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-          src={src}
-          width="32"
-          style={{ verticalAlign: "middle" }}
-        />
-        <span style={{ verticalAlign: "middle", marginLeft: ".5em" }}>
-          {rowData.representative.name}
-        </span>
-      </React.Fragment>
-    );
-  };
-
-  const renderRepresentativeFilter = () => {
-    return (
-      <MultiSelect
-        className="p-column-filter"
-        value={selectedRepresentatives}
-        options={representatives}
-        onChange={onRepresentativeFilterChange}
-        itemTemplate={representativeItemTemplate}
-        placeholder="All"
-        optionLabel="name"
-        optionValue="name"
-      />
-    );
-  };
-
-  const representativeItemTemplate = (option) => {
-    const src = "showcase/demo/images/avatar/" + option.image;
-
-    return (
-      <div className="p-multiselect-representative-option">
-        <img
-          alt={option.name}
-          src={src}
-          srcSet="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-          width="32"
-          style={{ verticalAlign: "middle" }}
-        />
-        <span style={{ verticalAlign: "middle", marginLeft: ".5em" }}>
-          {option.name}
-        </span>
-      </div>
-    );
-  };
-
-  const onRepresentativeFilterChange = (event) => {
-    dt.current.filter(event.value, "representative.name", "in");
-    setSelectedRepresentatives(event.value);
-  };
-
-  const renderDateFilter = () => {
-    return (
-      <Calendar
-        value={dateFilter}
-        onChange={onDateFilterChange}
-        placeholder="Registration Date"
-        dateFormat="yy-mm-dd"
-        className="p-column-filter"
-      />
-    );
-  };
-
-  const onDateFilterChange = (event) => {
-    if (event.value !== null)
-      dt.current.filter(formatDate(event.value), "date", "equals");
-    else dt.current.filter(null, "date", "equals");
-
-    setDateFilter(event.value);
-  };
-
-  const filterDate = (value, filter) => {
-    if (
-      filter === undefined ||
-      filter === null ||
-      (typeof filter === "string" && filter.trim() === "")
-    ) {
-      return true;
-    }
-
-    if (value === undefined || value === null) {
-      return false;
-    }
-
-    return value === formatDate(filter);
-  };
-
-  const formatDate = (date) => {
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-
-    if (month < 10) {
-      month = "0" + month;
-    }
-
-    if (day < 10) {
-      day = "0" + day;
-    }
-
-    return date.getFullYear() + "-" + month + "-" + day;
-  };
-
-  const renderStatusFilter = () => {
-    return (
-      <Dropdown
-        value={selectedStatus}
-        options={statuses}
-        onChange={onStatusFilterChange}
-        itemTemplate={statusItemTemplate}
-        showClear={true}
-        placeholder="Select a Status"
-        className="p-column-filter"
-      />
-    );
-  };
-
-  const statusItemTemplate = (option) => {
-    return (
-      <span className={classNames("customer-badge", "status-" + option)}>
-        {option}
-      </span>
-    );
-  };
-
-  const onStatusFilterChange = (event) => {
-    dt.current.filter(event.value, "status", "equals");
-    setSelectedStatus(event.value);
-  };
-
-  const header = renderHeader();
-  const representativeFilter = renderRepresentativeFilter();
-  const dateFilterEl = renderDateFilter();
-  const statusFilter = renderStatusFilter();
+  console.log('customers', customers)
 
   return (
-    <main>
-      <div className="datatable-doc-demo">
-        <DataTable
-          ref={dt}
-          value={customers}
-          header={header}
-          responsive
-          className="p-datatable-customers"
-          dataKey="id"
-          rowHover
-          globalFilter={globalFilter}
-          //   selection={selectedCustomers}
-          //   onSelectionChange={(e) => setSelectedCustomers(e.value)}
-          paginator
-          rows={10}
-          emptyMessage="No customers found"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          rowsPerPageOptions={[10, 25, 50]}
-        >
-          {/* <Column selectionMode="multiple" style={{ width: "3em" }} /> */}
-          <Column
-            field="name"
-            header="Name"
-            sortable
-            filter
-            filterPlaceholder="Search by name"
-          />
-          <Column
-            sortField="country.name"
-            filterField="country.name"
-            header="Country"
-            body={countryBodyTemplate}
-            sortable
-            filter
-            filterMatchMode="contains"
-            filterPlaceholder="Search by country"
-          />
-          <Column
-            sortField="representative.name"
-            filterField="representative.name"
-            header="Projects"
-            body={representativeBodyTemplate}
-            sortable
-            filter
-            filterElement={representativeFilter}
-          />
-          <Column
-            field="date"
-            header="Date"
-            sortable
-            filter
-            filterMatchMode="custom"
-            filterFunction={filterDate}
-            filterElement={dateFilterEl}
-          />
-          <Column
-            field="status"
-            header="Status"
-            body={statusBodyTemplate}
-            sortable
-            filter
-            filterElement={statusFilter}
-          />
-          <Column
-            field="activity"
-            header="Percentaje"
-            body={activityBodyTemplate}
-            sortable
-            filter
-            filterMatchMode="gte"
-            filterPlaceholder="Minimum"
-          />
-          <Column
-            body={actionBodyTemplate}
-            headerStyle={{ width: "8em", textAlign: "center" }}
-            bodyStyle={{ textAlign: "center", overflow: "visible" }}
-          />
-        </DataTable>
+    <div>
+      <table className="table table-bordered">
+        <thead className="thead-dark">
+          <tr>
+            <th className="text-justify" scope="col">Nombre</th>
+            <th scope="col">Compañia</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Procentaje</th>
+            <th scope="col">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {customers.length > 0 && (
+            customers.map(custome => {
+              console.log('custome', custome)
+              return (
+                <tr>
+                  <td>{custome.name}</td>
+                  <td>{custome.company}</td>
+                  <td>{custome.date}</td>
+                  <td>{custome.percentaje}%</td>
+                  <td className="text-center">
+                    <button type="button" className="btn btn-warning mr-2">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        className="bi bi-pencil-square"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path
+                          fillRule="evenodd"
+                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+                        />
+                      </svg>
+                    </button>
+                    <button type="button" className="btn btn-danger mr-2">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        className="bi bi-trash"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                        <path
+                          fillRule="evenodd"
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                        />
+                      </svg>
+                    </button>
+                    <CopyToClipboard
+                      text={`${path}/${custome.id}`}
+                      onCopy={() => console.log("copied")}
+                    >
+                      <button type="button" className="btn btn-light">
+                        <svg
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 16 16"
+                          className="bi bi-clipboard"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            fillRule="evenodd"
+                            d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"
+                          />
+                          <path
+                            fillRule="evenodd"
+                            d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"
+                          />
+                        </svg>
+                      </button>
+                    </CopyToClipboard>
+
+                  </td>
+                </tr>
+              )
+            })
+          )
+          }
+        </tbody>
+      </table>
+      <div className="d-flex flex-row-reverse bd-highlight mr-5">
+        <button type="button" className="btn btn-outline-primary" onClick={() => setModalShow(true)}>Crear</button>
       </div>
-    </main>
+
+      <ModalView
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        onSubmit={handleSubmit}
+      />
+    </div>
   );
 };

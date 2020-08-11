@@ -136,7 +136,9 @@ header.masthead .bg-circle-4 {
   border-color: #ee0979;
 }
 
-.btn-primary:active, .btn-primary:focus, .btn-primary:hover {
+.btn-primary:active,
+.btn-primary:focus,
+.btn-primary:hover {
   background-color: #bd0760 !important;
   border-color: #bd0760 !important;
 }
@@ -150,7 +152,9 @@ header.masthead .bg-circle-4 {
   border-color: #ff6a00;
 }
 
-.btn-secondary:active, .btn-secondary:focus, .btn-secondary:hover {
+.btn-secondary:active,
+.btn-secondary:focus,
+.btn-secondary:hover {
   background-color: #cc5500 !important;
   border-color: #cc5500 !important;
 }

@@ -1,9 +1,9 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import * as firebase from "firebase";
-import { upperFirst } from "lodash";
-import { Sofia } from "./templates/Sofia";
-import { Aurora } from "./templates/Aurora";
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import * as firebase from 'firebase';
+import { upperFirst } from 'lodash';
+import { Sofia } from './templates/Sofia';
+import { Aurora } from './templates/Aurora';
 
 export function DeciderTemplate() {
   const [loading, setLoading] = React.useState(false);
@@ -26,12 +26,12 @@ export function DeciderTemplate() {
   const typeTemplate = upperFirst(data.template);
   console.log(typeTemplate, hash);
 
-  const retrieveData = React.useCallback( async () => {
+  const retrieveData = React.useCallback(async () => {
     try {
       setLoading(true);
       const Document = await firebase
         .firestore()
-        .collection("clients")
+        .collection('clients')
         .doc(hash)
         .get();
       if (Document.exists) {
@@ -39,14 +39,14 @@ export function DeciderTemplate() {
         setData(response);
       } else {
         // doc.data() will be undefined in this case
-        console.log("No such document!");
+        console.log('No such document!');
       }
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  },[hash]);
+  }, [hash]);
 
   React.useEffect(() => {
     retrieveData();
@@ -59,6 +59,6 @@ export function DeciderTemplate() {
       </div>
     );
 
-  console.log("data", data);
+  console.log('data', data);
   return templates[typeTemplate] || templates.DefaultTemplate;
 }

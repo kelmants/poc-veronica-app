@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from 'axios';
 
 export class CustomerService {
   getCustomers() {
-    return axios.get("data.json").then((res) => res.data.data);
+    return axios.get('data.json').then((res) => res.data.data);
   }
 }

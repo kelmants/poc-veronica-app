@@ -18,5 +18,5 @@ export const createRowTable = (data) => ({
   date: data?.date,
   status: data?.status,
   activity: data?.percentaje,
-  representative: { name: "Ioni Bowcher", image: "ionibowcher.png" },
+  representative: { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
 });

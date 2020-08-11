@@ -1,10 +1,10 @@
-import React from "react";
-import { Nav } from "../components/sofia/Nav";
-import { Header } from "../components/sofia/Header";
-import { Footer } from "../components/sofia/Footer";
-import One from "../assets/img/01.jpg";
-import Two from "../assets/img/02.jpg";
-import three from "../assets/img/03.jpg";
+import React from 'react';
+import { Nav } from '../components/sofia/Nav';
+import { Header } from '../components/sofia/Header';
+import { Footer } from '../components/sofia/Footer';
+import One from '../assets/img/01.jpg';
+import Two from '../assets/img/02.jpg';
+import three from '../assets/img/03.jpg';
 
 export function Sofia({ name }) {
   return (

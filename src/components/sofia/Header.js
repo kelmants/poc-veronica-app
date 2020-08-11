@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-export const Header = ({ name = "%{{Nombre}}" }) => {
+export const Header = ({ name = '%{{Nombre}}' }) => {
   return (
     <header className="masthead text-center text-white">
       <div className="masthead-content">

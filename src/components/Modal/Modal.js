@@ -36,7 +36,7 @@ export default function ModalView(props) {
                     </div>
                     <div className="form-group">
                         <label htmlFor="date">Fecha</label>
-                        <input type="text" value={dataForm?.date || ''} name="date" className="form-control" onChange={handleOnChange} />
+                        <input type="date" value={dataForm?.date || ''} name="date" className="form-control" onChange={handleOnChange} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="status">Status</label>
@@ -44,7 +44,7 @@ export default function ModalView(props) {
                     </div>
                     <div className="form-group">
                         <label htmlFor="percentaje">Porcentaje</label>
-                        <input type="text" value={dataForm?.percentaje || ''} name="percentaje" className="form-control" onChange={handleOnChange} />
+                        <input type="number" value={dataForm?.percentaje || ''} name="percentaje" className="form-control" onChange={handleOnChange} />
                     </div>
                     <select name="template" onChange={handleOnChange} value={dataForm.template} className="form-group custom-select">
                         <option selected>Selecciona un template</option>

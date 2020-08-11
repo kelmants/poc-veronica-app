@@ -1,6 +1,10 @@
 import React from 'react';
 
-export const Header = ({ name = '%{{Nombre}}' }) => {
+export const Header = ({
+  name = '%{{Nombre}}',
+  accepted = false,
+  onAccept = () => {},
+}) => {
   return (
     <header className="masthead text-center text-white">
       <div className="masthead-content">
@@ -10,9 +14,19 @@ export const Header = ({ name = '%{{Nombre}}' }) => {
             Desde consulting te que remos hacer llegar esta propuesta para
             vos!!!
           </h2>
-          <a href="#/" className="btn btn-primary btn-xl rounded-pill mt-5">
-            Ver más
-          </a>
+          {accepted ? (
+            <button
+              className="btn btn-primary btn-xl rounded-pill mt-5"
+              disabled>
+              Propuesta aceptada con exíto
+            </button>
+          ) : (
+            <button
+              className="btn btn-primary btn-xl rounded-pill mt-5"
+              onClick={onAccept}>
+              Aceptar propuesta
+            </button>
+          )}
         </div>
       </div>
       <div className="bg-circle-1 bg-circle"></div>

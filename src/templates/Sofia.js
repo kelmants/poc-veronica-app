@@ -6,11 +6,11 @@ import One from '../assets/img/01.jpg';
 import Two from '../assets/img/02.jpg';
 import three from '../assets/img/03.jpg';
 
-export function Sofia({ name }) {
+export function Sofia({ name, accepted, onAccept }) {
   return (
     <main>
       <Nav />
-      <Header name={name} />
+      <Header name={name} accepted={accepted} onAccept={onAccept} />
 
       <section>
         <div className="container">

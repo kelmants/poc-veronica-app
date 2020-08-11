@@ -10,10 +10,37 @@ export function DeciderTemplate() {
   const [data, setData] = React.useState({});
   const { hash } = useParams();
 
+  const handleAccept = React.useCallback(async () => {
+    console.log('enter acceptance');
+    try {
+      await firebase
+        .firestore()
+        .collection('clients')
+        .doc(hash)
+        .update({ status: true });
+
+      console.log('Propuesta aceptada con exito');
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   const templates = React.useMemo(
     () => ({
-      Sofia: <Sofia name={data?.name} />,
-      Aurora: <Aurora name={data?.name} />,
+      Sofia: (
+        <Sofia
+          name={data?.name}
+          accepted={data?.status}
+          onAccept={handleAccept}
+        />
+      ),
+      Aurora: (
+        <Aurora
+          name={data?.name}
+          accepted={data?.status}
+          onAccept={handleAccept}
+        />
+      ),
       DefaultTemplate: (
         <div>
           <span>Nothing here</span>

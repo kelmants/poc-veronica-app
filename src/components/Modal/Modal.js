@@ -46,6 +46,11 @@ export default function ModalView(props) {
                         <label htmlFor="percentaje">Porcentaje</label>
                         <input type="text" value={dataForm?.percentaje || ''} name="percentaje" className="form-control" onChange={handleOnChange} />
                     </div>
+                    <select name="template" onChange={handleOnChange} value={dataForm.template} className="form-group custom-select">
+                        <option selected>Selecciona un template</option>
+                        <option value="sofia">Sofia</option>
+                        <option value="aurora">Aurora </option>
+                    </select>
                     <button onClick={handleSubmit} className="btn btn-primary">Submit</button>
                 </div>
             </Modal.Body>

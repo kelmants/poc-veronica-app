@@ -6,7 +6,7 @@ import { Sofia } from './templates/Sofia';
 import { Aurora } from './templates/Aurora';
 
 export function DeciderTemplate() {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState({});
   const { hash } = useParams();
 
@@ -51,33 +51,24 @@ export function DeciderTemplate() {
   );
 
   const typeTemplate = upperFirst(data.template);
-  console.log(typeTemplate, hash);
+  function onNext(DocumentSnap) {
+    const document = { ...DocumentSnap.data(), uuid: DocumentSnap.id };
+    console.log(document);
+    setData(document);
+    setLoading(false);
+  }
 
-  const retrieveData = React.useCallback(async () => {
-    try {
-      setLoading(true);
-      const Document = await firebase
-        .firestore()
-        .collection('clients')
-        .doc(hash)
-        .get();
-      if (Document.exists) {
-        const response = { ...Document.data(), uuid: Document.id };
-        setData(response);
-      } else {
-        // doc.data() will be undefined in this case
-        console.log('No such document!');
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [hash]);
+  function onError(error) {
+    console.log(error);
+  }
 
   React.useEffect(() => {
-    retrieveData();
-  }, [retrieveData]);
+    firebase
+      .firestore()
+      .collection('clients')
+      .doc(hash)
+      .onSnapshot(onNext, onError);
+  }, []);
 
   if (loading)
     return (

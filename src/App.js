@@ -11,6 +11,7 @@ import { Sofia } from './templates/Sofia';
 import { DeciderTemplate } from './DeciderTemplate';
 import { LoginPages } from './pages/login/LoginPages';
 import { Dashboard } from './pages/Dashboard/Dashboard';
+import HiringRoom from './pages/HiringRoom/HiringRoom';
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
@@ -32,6 +33,9 @@ function App() {
         </Route>
         <Route exact path="/dashboard">
           <Dashboard />
+        </Route>
+        <Route exact path="/hiringroom">
+          <HiringRoom/>
         </Route>
         <Route exact path="/">
           <Sofia />

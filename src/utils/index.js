@@ -20,3 +20,18 @@ export const createRowTable = (data) => ({
   activity: data?.percentaje,
   representative: { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
 });
+
+export const formatDataHiringRoom = (data) => {
+  return data.reduce((acc,current) => {
+      acc.push({
+          key: current.id,
+          name: `${current.nombre} ${current.apellido}`,
+          email: current.email,
+          cellPhone: current.telefonoCelular,
+          age: current.fechaNacimiento,
+          tags: current.conocimientos
+      })
+      console.log('acc', acc);
+      return acc
+  }, [])
+}

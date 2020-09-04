@@ -46,8 +46,6 @@ export const Dashboard = () => {
     );
   }
 
-  console.log('customers', customers)
-
   return (
     <div>
       <table className="table table-bordered">
@@ -63,7 +61,6 @@ export const Dashboard = () => {
         <tbody>
           {customers.length > 0 && (
             customers.map(custome => {
-              console.log('custome', custome)
               return (
                 <tr>
                   <td>{custome.name}</td>

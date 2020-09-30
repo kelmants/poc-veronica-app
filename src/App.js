@@ -3,6 +3,7 @@ import './assets/css/one-page-wonder.min.css';
 import React from 'react';
 import firebase from 'firebase/app';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { hot } from 'react-hot-loader/root';
 
 import './App.css';
 import NoMatch from './NoMatch/NoMatch';
@@ -17,12 +18,12 @@ import HiringRoom from './pages/HiringRoom/HiringRoom';
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
-if (window.location.hostname === 'localhost') {
-  firebase.firestore().settings({
-    host: 'localhost:8080',
-    ssl: false,
-  });
-}
+// if (window.location.hostname === 'localhost') {
+//   firebase.firestore().settings({
+//     host: 'localhost:8080',
+//     ssl: false,
+//   });
+// }
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
           <Dashboard />
         </Route>
         <Route exact path="/hiringroom">
-          <HiringRoom/>
+          <HiringRoom />
         </Route>
         <Route exact path="/">
           <Sofia />
@@ -49,4 +50,4 @@ function App() {
   );
 }
 
-export default App;
+export default process.env.NODE_ENV === 'development' ? hot(App) : App;

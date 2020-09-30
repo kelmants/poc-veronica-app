@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import * as firebase from 'firebase';
 import ModalView from '../../components/Modal';
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import ModalViewHiring from '../../components/ModalHiring';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import mock from '../../Mocks/candidates.json';
 
 const path =
   process.env.NODE_ENV === 'development'
@@ -10,15 +12,21 @@ const path =
 
 export const Dashboard = () => {
   const [customers, setCustomers] = useState([]);
+  const [datahiring, setDataHiring] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalShow, setModalShow] = useState(false);
+  const [modalShowHiringRoom, setModalShowHiringRoom] = useState(false);
 
   const handleSubmit = (value, callBack) => {
-    firebase.firestore().collection("clients").add(value).then(function () {
-      callBack()
-      setModalShow(false)
-    })
-  }
+    firebase
+      .firestore()
+      .collection('clients')
+      .add(value)
+      .then(function () {
+        callBack();
+        setModalShow(false);
+      });
+  };
 
   function onNext(DocumentSnap) {
     const wrapper = [];
@@ -38,6 +46,33 @@ export const Dashboard = () => {
     firebase.firestore().collection('clients').onSnapshot(onNext, onError);
   }, []);
 
+  const handleCreateDefaultProporsal = () => setModalShow(true);
+
+  const mockFetch = () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({ data: mock });
+      }, 2000);
+    });
+  };
+
+  const handleCreateProporsalWithHiringRoom = async () => {
+    try {
+      const { data } = await mockFetch();
+      console.log(data);
+      setModalShowHiringRoom(true);
+      setDataHiring(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCandidate = (user) => {
+    console.log(user);
+    setModalShowHiringRoom(false);
+    setModalShow(true);
+  };
+
   if (loading) {
     return (
       <div>
@@ -51,7 +86,9 @@ export const Dashboard = () => {
       <table className="table table-bordered">
         <thead className="thead-dark">
           <tr>
-            <th className="text-justify" scope="col">Nombre</th>
+            <th className="text-justify" scope="col">
+              Nombre
+            </th>
             <th scope="col">Compañia</th>
             <th scope="col">Fecha</th>
             <th scope="col">Procentaje</th>
@@ -59,10 +96,10 @@ export const Dashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {customers.length > 0 && (
-            customers.map(custome => {
+          {customers.length > 0 &&
+            customers.map((custome, index) => {
               return (
-                <tr>
+                <tr key={`${custome.name}-${index}`}>
                   <td>{custome.name}</td>
                   <td>{custome.company}</td>
                   <td>{custome.date}</td>
@@ -100,8 +137,7 @@ export const Dashboard = () => {
                     </button>
                     <CopyToClipboard
                       text={`${path}/${custome.id}`}
-                      onCopy={() => console.log("copied")}
-                    >
+                      onCopy={() => console.log('copied')}>
                       <button type="button" className="btn btn-light">
                         <svg
                           width="1em"
@@ -121,23 +157,38 @@ export const Dashboard = () => {
                         </svg>
                       </button>
                     </CopyToClipboard>
-
                   </td>
                 </tr>
-              )
-            })
-          )
-          }
+              );
+            })}
         </tbody>
       </table>
       <div className="d-flex flex-row-reverse bd-highlight mr-5">
-        <button type="button" className="btn btn-outline-primary" onClick={() => setModalShow(true)}>Crear</button>
+        <button
+          type="button"
+          className="btn btn-outline-primary"
+          onClick={handleCreateDefaultProporsal}>
+          Crear
+        </button>
+        <button
+          type="button"
+          className="btn btn-outline-primary"
+          onClick={handleCreateProporsalWithHiringRoom}>
+          Crear desde hiring room
+        </button>
       </div>
 
       <ModalView
         show={modalShow}
         onHide={() => setModalShow(false)}
         onSubmit={handleSubmit}
+      />
+      <ModalViewHiring
+        show={modalShowHiringRoom}
+        data={datahiring}
+        onHide={() => setModalShowHiringRoom(false)}
+        onSubmit={handleSubmit}
+        onCandidate={handleCandidate}
       />
     </div>
   );

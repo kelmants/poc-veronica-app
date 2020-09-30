@@ -22,16 +22,17 @@ export const createRowTable = (data) => ({
 });
 
 export const formatDataHiringRoom = (data) => {
-  return data.reduce((acc,current) => {
-      acc.push({
-          key: current.id,
-          name: `${current.nombre} ${current.apellido}`,
-          email: current.email,
-          cellPhone: current.telefonoCelular,
-          age: current.fechaNacimiento,
-          tags: current.conocimientos
-      })
-      console.log('acc', acc);
-      return acc
-  }, [])
-}
+  return data.reduce((acc, current) => {
+    return [
+      ...acc,
+      {
+        key: current.id,
+        name: `${current.nombre} ${current.apellido}`,
+        email: current.email,
+        cellPhone: current.telefonoCelular,
+        age: current.fechaNacimiento,
+        tags: current.conocimientos,
+      },
+    ];
+  }, []);
+};
